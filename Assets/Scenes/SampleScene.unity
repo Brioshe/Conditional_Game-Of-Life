@@ -1274,7 +1274,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nodeviewPrefab: {fileID: 2579529548292554483, guid: d0cd3f404cc122846a8ffff13863ade9, type: 3}
-  aliveColor: {r: 0, g: 0, b: 0, a: 1}
+  redColor: {r: 1, g: 0, b: 0, a: 1}
+  blueColor: {r: 0, g: 0, b: 1, a: 1}
   deadColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &518533867
 GameObject:
@@ -2786,9 +2787,9 @@ MonoBehaviour:
   defaultPressed: {r: 0.7254902, g: 0.72156864, b: 0.72156864, a: 1}
   dropdown: {fileID: 1565310675}
   mapPreset: 0
-  empty: {fileID: 4900000, guid: a15451953614fc14587283ad330e2656, type: 3}
+  test: {fileID: 4900000, guid: f53879af3af6d6643a13561b54f73595, type: 3}
   gliders: {fileID: 4900000, guid: 84bf7ce1b17c8a64e813d7951ac63b35, type: 3}
-  blinkers: {fileID: 4900000, guid: f53879af3af6d6643a13561b54f73595, type: 3}
+  blinkers: {fileID: 0}
   gun: {fileID: 4900000, guid: 59e4c55ada71c0649b608e6017366d79, type: 3}
 --- !u!4 &1291943517
 Transform:

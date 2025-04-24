@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum CellState {
     dead = 0,
-    alive = 1
+    red = 1,
+    blue = 2
 }
 
 public class Node

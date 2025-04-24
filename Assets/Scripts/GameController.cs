@@ -62,7 +62,7 @@ public class GameController : MonoBehaviour
 
     public MapPresets mapPreset;
 
-    public TextAsset empty;
+    public TextAsset test;
     public TextAsset gliders;
     public TextAsset blinkers;
     public TextAsset gun;
@@ -161,7 +161,7 @@ public class GameController : MonoBehaviour
         if (!mapSetFlag) {
             if (mapPreset == MapPresets.empty)
             {
-                SetState(empty);
+                SetState(test);
             }
             else if (mapPreset == MapPresets.gliders)
             {
@@ -283,7 +283,7 @@ public class GameController : MonoBehaviour
             
             Debug.Log("SwitchState probe ray hit @ (" + nodeView.node.xIndex + ", " + nodeView.node.yIndex + ")");
 
-            if (nodeView.node.cellState == CellState.alive)
+            if (nodeView.node.cellState == CellState.red)
             {
                 switchStateLock = true;
             }
@@ -302,8 +302,6 @@ public class GameController : MonoBehaviour
         {
             GameObject clickedObj = hit.collider.gameObject;
             NodeView nodeView = clickedObj.GetComponentInParent<NodeView>();
-            
-            Debug.Log("Raycast hit @ (" + nodeView.node.xIndex + ", " + nodeView.node.yIndex + ")");
 
             if (nodeView != null && nodeView.node != null && lastNodeRaycast != nodeView.node)
             {
@@ -311,9 +309,9 @@ public class GameController : MonoBehaviour
 
                 if (nodeView.node.cellState == CellState.dead && switchStateLock == false)
                 {
-                    nodeView.node.cellState = CellState.alive;
+                    nodeView.node.cellState = CellState.red;
                 }
-                else if (nodeView.node.cellState == CellState.alive && switchStateLock == true)
+                else if (nodeView.node.cellState == CellState.red && switchStateLock == true)
                 {
                     nodeView.node.cellState = CellState.dead;
                 }

@@ -4,7 +4,8 @@ using UnityEngine;
 public class GraphView : MonoBehaviour
 {
     public GameObject nodeviewPrefab;
-    public Color aliveColor = Color.black;
+    public Color redColor = Color.red;
+    public Color blueColor = Color.blue;
     public Color deadColor = Color.white;
     public NodeView[,] nodeViews;
     public void Init(GraphClass graph)
