@@ -17,6 +17,7 @@ public class Node
     public Vector3 position;
     public List<Node> neighbors = new List<Node>();
     public Node previous = null;
+    public bool nextStateFlag = false;
     // Constructor with three parameters
     public Node(int xIndex, int yIndex, CellState cellState)
     {

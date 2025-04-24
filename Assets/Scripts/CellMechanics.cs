@@ -83,7 +83,7 @@ public class CellMechanics : MonoBehaviour
 
             // BLUE RULES
             // Death
-            if (n.cellState == CellState.blue && (aliveNeighborCount < 3 || aliveNeighborCount > 4))
+            if (n.cellState == CellState.blue && (aliveNeighborCount < 2 || aliveNeighborCount > 3))
             {
                 nextAlive = CellState.dead;
             }
@@ -91,15 +91,22 @@ public class CellMechanics : MonoBehaviour
             if (n.cellState == CellState.dead && aliveNeighborCount == 2 && AvgCellState(n) == CellState.blue)
             {
                 nextAlive = CellState.blue;
-                RandomNode(n).cellState = CellState.blue;
+                RandomNodeChange(n);
             }
 
-            nextStates[n.xIndex, n.yIndex] = nextAlive;
+            // FIGHTING RULES
+
+            if (n.nextStateFlag == false)
+            {
+                nextStates[n.xIndex, n.yIndex] = nextAlive;
+                n.nextStateFlag = true;
+            }
         }
 
         foreach (Node n in Graph.nodes)
         {
             n.cellState = nextStates[n.xIndex, n.yIndex];
+            n.nextStateFlag = false;
         }
 
         UpdateAliveNodes();
@@ -137,24 +144,15 @@ public class CellMechanics : MonoBehaviour
         return (CellState)Math.Ceiling(sum);
     }
 
-    private Node RandomNode(Node node)
+    private void RandomNodeChange(Node node)
     {
-        int randomInt = (int)UnityEngine.Random.Range(0, 6);
+        int randomInt = (int)UnityEngine.Random.Range(0, node.neighbors.Count);
 
         if (node.neighbors[randomInt] != null)
         {
-            Debug.Log("randomInt Index (1st try successful): " + randomInt);
-            return node.neighbors[randomInt];
+            nextStates[node.neighbors[randomInt].xIndex, node.neighbors[randomInt].yIndex] = CellState.blue;
+            node.neighbors[randomInt].nextStateFlag = true;
         }
-        else
-        {
-            while (node.neighbors[randomInt] == null)
-            {
-                Debug.Log("randomInt Index (RETRY): " + randomInt);
-                randomInt = (int)UnityEngine.Random.Range(0, 6);
-            }
-            Debug.Log("randomInt Index (Retried several times): " + randomInt);
-            return node.neighbors[randomInt];
-        }
+        
     }
 }
