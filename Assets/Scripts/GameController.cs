@@ -216,6 +216,7 @@ public class GameController : MonoBehaviour
             stopText.enabled = false;
 
             mapSetFlag = false;
+
             ChooseMapPreset();  // Allow map change when game stops.
 
             IsGamePaused = false;

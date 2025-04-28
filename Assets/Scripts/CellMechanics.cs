@@ -8,9 +8,9 @@ public class CellMechanics : MonoBehaviour
 {
     GraphClass Graph;
     GraphView GraphView;
-    List<Node> RedNodes;
-    List<Node> BlueNodes;
     CellState[,] nextStates;
+
+    private Dictionary<CellState, CellBehaviorInterface> behaviorMap;
 
     public void Init(GraphClass Graph, GraphView GraphView)
     {
@@ -22,9 +22,13 @@ public class CellMechanics : MonoBehaviour
 
         this.Graph = Graph;
         this.GraphView = GraphView;
-        RedNodes = new List<Node>();
-        BlueNodes = new List<Node>();
         nextStates = new CellState[Graph.m_width, Graph.m_height];
+
+        behaviorMap = new Dictionary<CellState,CellBehaviorInterface>
+        {
+            { CellState.red, new RedCellBehavior()},
+            { CellState.blue, new BlueCellBehavior()},
+        };
 
         UpdateAliveNodes();
     }
@@ -33,72 +37,40 @@ public class CellMechanics : MonoBehaviour
     {
         foreach (Node n in Graph.nodes)
         {
-            if (n.cellState == CellState.red && !RedNodes.Contains(n))
+            if (n.cellState == CellState.red)
             {
-                RedNodes.Add(n);
+                GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.redColor);
             }
-            if (n.cellState == CellState.blue && !BlueNodes.Contains(n))
+            if (n.cellState == CellState.blue)
             {
-                BlueNodes.Add(n);
+                GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.blueColor);
             }
-            if (n.cellState == CellState.dead && (RedNodes.Contains(n) || BlueNodes.Contains(n)))
+            if (n.cellState == CellState.dead)
             {
-                if (RedNodes.Contains(n))
-                {
-                    RedNodes.Remove(n);
-                }
-                if (BlueNodes.Contains(n))
-                {
-                    BlueNodes.Remove(n);
-                }
-
-                NodeView deadNode = GraphView.nodeViews[n.xIndex, n.yIndex];
-                deadNode.ColorNode(GraphView.deadColor);
+                GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.deadColor);
             }
         }
-        GraphView.ColorNodes(RedNodes, GraphView.redColor);
-        GraphView.ColorNodes(BlueNodes, GraphView.blueColor);
     }
 
     public void UpdateCellStates()
     {
         int aliveNeighborCount = 0;
+
         foreach (Node n in Graph.nodes)
         {
             aliveNeighborCount = CountAliveNeighbors(n);
-            CellState nextAlive = n.cellState; 
-            // Game Rules
+            var neighbors = n.neighbors;
+            CellState currentState = n.cellState; 
+            CellState avgNeighbor = AvgCellState(n);
 
-            // RED RULES
-            // Death
-            if (n.cellState == CellState.red && (aliveNeighborCount < 3 || aliveNeighborCount > 7))
+            if (behaviorMap.TryGetValue(avgNeighbor, out var behavior))
             {
-                nextAlive = CellState.dead;
+                currentState = behavior.GetNextState(n, neighbors);
             }
-            // Birth
-            if (n.cellState == CellState.dead && aliveNeighborCount >= 3 && AvgCellState(n) == CellState.red)
-            {
-                nextAlive = CellState.red;
-            }
-
-            // BLUE RULES
-            // Death
-            if (n.cellState == CellState.blue && (aliveNeighborCount < 2 || aliveNeighborCount > 3))
-            {
-                nextAlive = CellState.dead;
-            }
-            // Birth
-            if (n.cellState == CellState.dead && aliveNeighborCount == 2 && AvgCellState(n) == CellState.blue)
-            {
-                nextAlive = CellState.blue;
-                RandomNodeChange(n);
-            }
-
-            // FIGHTING RULES
 
             if (n.nextStateFlag == false)
             {
-                nextStates[n.xIndex, n.yIndex] = nextAlive;
+                nextStates[n.xIndex, n.yIndex] = currentState;
                 n.nextStateFlag = true;
             }
         }
@@ -112,7 +84,7 @@ public class CellMechanics : MonoBehaviour
         UpdateAliveNodes();
     }
 
-    private int CountAliveNeighbors(Node node)
+    public int CountAliveNeighbors(Node node)
     {
         int aliveCount = 0;
         foreach (Node n in node.neighbors)
@@ -125,7 +97,7 @@ public class CellMechanics : MonoBehaviour
         return aliveCount;
     }
 
-    private CellState AvgCellState(Node node)
+    public CellState AvgCellState(Node node)
     {
         float sum = 0;
         int avgDivValue = 0;
@@ -152,7 +124,6 @@ public class CellMechanics : MonoBehaviour
         {
             nextStates[node.neighbors[randomInt].xIndex, node.neighbors[randomInt].yIndex] = CellState.blue;
             node.neighbors[randomInt].nextStateFlag = true;
-        }
-        
+        } 
     }
 }
