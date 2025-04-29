@@ -32,6 +32,7 @@ public class GameController : MonoBehaviour
     public TextMeshProUGUI stopText;
     public UnityEngine.UI.Button Pausebutton;
     public UnityEngine.UI.Button Stepbutton;
+    public RawImage SelectedBG;
 
     // Colors
 
@@ -55,22 +56,19 @@ public class GameController : MonoBehaviour
     public TMP_Dropdown dropdown;
     public enum MapPresets {
         empty,
-        blinkers,
-        gliders,
-        gun
+        fourcorners
     }
 
     public MapPresets mapPreset;
 
     public TextAsset test;
-    public TextAsset gliders;
-    public TextAsset blinkers;
-    public TextAsset gun;
+    public TextAsset fourcorners;
 
     // Flags
     private bool mapSetFlag = false;
     private bool isDragging = false;
     private bool switchStateLock;
+    public CellState switchCellState = CellState.red;
 
     private Node lastNodeRaycast = null;
 
@@ -163,17 +161,9 @@ public class GameController : MonoBehaviour
             {
                 SetState(test);
             }
-            else if (mapPreset == MapPresets.gliders)
+            else if (mapPreset == MapPresets.fourcorners)
             {
-                SetState(gliders);
-            }
-            else if (mapPreset == MapPresets.blinkers)
-            {
-                SetState(blinkers);
-            }
-            else if (mapPreset == MapPresets.gun)
-            {
-                SetState(gun);
+                SetState(fourcorners);
             }
             mapSetFlag = true;
         }
@@ -267,6 +257,7 @@ public class GameController : MonoBehaviour
             for (int x = 0; x < graph.m_width; x++)
             {
                 graph.nodes[x, y].cellState = (CellState)char.GetNumericValue(lines[y][x]); // Set node values to equal map values
+                Debug.Log(graph.nodes[x, y].cellState);
             }
         }
 
@@ -284,7 +275,7 @@ public class GameController : MonoBehaviour
             
             Debug.Log("SwitchState probe ray hit @ (" + nodeView.node.xIndex + ", " + nodeView.node.yIndex + ")");
 
-            if (nodeView.node.cellState == CellState.red)
+            if (nodeView.node.cellState != CellState.dead)
             {
                 switchStateLock = true;
             }
@@ -310,13 +301,41 @@ public class GameController : MonoBehaviour
 
                 if (nodeView.node.cellState == CellState.dead && switchStateLock == false)
                 {
-                    nodeView.node.cellState = CellState.red;
+                    nodeView.node.cellState = switchCellState;
                 }
-                else if (nodeView.node.cellState == CellState.red && switchStateLock == true)
+                else if (nodeView.node.cellState != CellState.dead && switchStateLock == true)
                 {
                     nodeView.node.cellState = CellState.dead;
                 }
+                else if (nodeView.node.cellState != switchCellState && switchStateLock == false)
+                {
+                    nodeView.node.cellState = switchCellState;
+                }
             }
         }
+    }
+
+    public void redButton()
+    {
+        switchCellState = CellState.red;
+        SelectedBG.color = Color.red;
+    }
+
+    public void yellowButton()
+    {
+        switchCellState = CellState.yellow;
+        SelectedBG.color = Color.yellow;
+    }
+
+    public void blueButton()
+    {
+        switchCellState = CellState.blue;
+        SelectedBG.color = Color.blue;
+    }
+
+    public void greenButton()
+    {
+        switchCellState = CellState.green;
+        SelectedBG.color = new Color32(45, 115, 54, 255);
     }
 }

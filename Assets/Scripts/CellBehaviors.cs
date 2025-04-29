@@ -50,13 +50,79 @@ public class BlueCellBehavior : CellBehaviorInterface
     {
         int blueNeighbors = neighbors.Count(n => n.cellState == CellState.blue);
     
-        if (node.cellState == CellState.red)
+        if (node.cellState == CellState.blue)
         {
             return (blueNeighbors >= 2 && blueNeighbors <= 3) ? CellState.blue : CellState.dead;
         }
-        else
+        else if (node.cellState == CellState.dead)
         {
             return (blueNeighbors == 2) ? CellState.blue : CellState.dead;
+        }
+        else
+        {
+            return node.cellState;
+        }
+    }
+    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    {
+        return CellState.dead;
+    }
+    public float GetWinChanceAgainst(CellState opponent)
+    {
+        return 0;
+    }
+}
+
+public class YellowCellBehavior : CellBehaviorInterface
+{
+    public CellMechanics cellMechanics; 
+
+    public CellState GetNextState(Node node, List<Node> neighbors)
+    {
+        int yellowNeighbors = neighbors.Count(n =>  n != node && n.cellState == CellState.yellow);
+    
+        if (node.cellState == CellState.yellow)
+        {
+            return (yellowNeighbors >= 2 && yellowNeighbors <= 3) ? CellState.yellow : CellState.dead;
+        }
+        else if (node.cellState == CellState.dead)
+        {
+            return (yellowNeighbors == 3) ? CellState.yellow : CellState.dead;
+        }
+        else
+        {
+            return CellState.dead;
+        }
+    }
+    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    {
+        return CellState.dead;
+    }
+    public float GetWinChanceAgainst(CellState opponent)
+    {
+        return 0;
+    }
+}
+
+public class GreenCellBehavior : CellBehaviorInterface
+{
+    public CellMechanics cellMechanics; 
+
+    public CellState GetNextState(Node node, List<Node> neighbors)
+    {
+        int greenNeighbors = neighbors.Count(n =>  n != node && n.cellState == CellState.green);
+    
+        if (node.cellState == CellState.yellow)
+        {
+            return (greenNeighbors >= 2 && greenNeighbors <= 3) ? CellState.green : CellState.dead;
+        }
+        else if (node.cellState == CellState.dead)
+        {
+            return (greenNeighbors == 3) ? CellState.green : CellState.dead;
+        }
+        else
+        {
+            return CellState.dead;
         }
     }
     public CellState? GetReplacement(Node node, List<Node> neighbors)

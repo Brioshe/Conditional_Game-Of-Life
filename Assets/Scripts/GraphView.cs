@@ -6,6 +6,8 @@ public class GraphView : MonoBehaviour
     public GameObject nodeviewPrefab;
     public Color redColor = Color.red;
     public Color blueColor = Color.blue;
+    public Color yellowColor = Color.yellow;
+    public Color greenColor = new Color32(45, 115, 54, 255);
     public Color deadColor = Color.white;
     public NodeView[,] nodeViews;
     public void Init(GraphClass graph)

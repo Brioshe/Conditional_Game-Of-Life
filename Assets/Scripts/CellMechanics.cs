@@ -3,12 +3,13 @@ using Unity.VisualScripting;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class CellMechanics : MonoBehaviour
 {
     GraphClass Graph;
     GraphView GraphView;
-    CellState[,] nextStates;
+    public CellState[,] nextStates;
 
     private Dictionary<CellState, CellBehaviorInterface> behaviorMap;
 
@@ -28,6 +29,8 @@ public class CellMechanics : MonoBehaviour
         {
             { CellState.red, new RedCellBehavior()},
             { CellState.blue, new BlueCellBehavior()},
+            { CellState.yellow, new YellowCellBehavior()},
+            { CellState.green, new GreenCellBehavior()}
         };
 
         UpdateAliveNodes();
@@ -49,6 +52,14 @@ public class CellMechanics : MonoBehaviour
             {
                 GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.deadColor);
             }
+            if (n.cellState == CellState.yellow)
+            {
+                GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.yellowColor);
+            }
+            if (n.cellState == CellState.green)
+            {
+                GraphView.nodeViews[n.xIndex, n.yIndex].ColorNode(GraphView.greenColor);
+            }
         }
     }
 
@@ -66,6 +77,16 @@ public class CellMechanics : MonoBehaviour
             if (behaviorMap.TryGetValue(avgNeighbor, out var behavior))
             {
                 currentState = behavior.GetNextState(n, neighbors);
+
+                if (currentState == CellState.blue)
+                {
+                    RandomNodeChange(n);
+                }
+
+                if (currentState == CellState.red && neighbors.Count(n => n.cellState == CellState.green) > 1)
+                {
+                    RandomNodeChange(n);
+                }
             }
 
             if (n.nextStateFlag == false)
@@ -112,6 +133,11 @@ public class CellMechanics : MonoBehaviour
         }
 
         sum /= avgDivValue;
+
+        if (avgDivValue == 0)
+        {
+            return node.cellState;
+        }
         
         return (CellState)Math.Ceiling(sum);
     }
@@ -120,9 +146,9 @@ public class CellMechanics : MonoBehaviour
     {
         int randomInt = (int)UnityEngine.Random.Range(0, node.neighbors.Count);
 
-        if (node.neighbors[randomInt] != null)
+        if (node.neighbors[randomInt] != null && node.neighbors[randomInt].cellState == CellState.dead)
         {
-            nextStates[node.neighbors[randomInt].xIndex, node.neighbors[randomInt].yIndex] = CellState.blue;
+            nextStates[node.neighbors[randomInt].xIndex, node.neighbors[randomInt].yIndex] = node.cellState;
             node.neighbors[randomInt].nextStateFlag = true;
         } 
     }
