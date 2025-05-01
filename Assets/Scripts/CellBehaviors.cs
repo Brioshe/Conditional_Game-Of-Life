@@ -79,7 +79,7 @@ public class YellowCellBehavior : CellBehaviorInterface
 
     public CellState GetNextState(Node node, List<Node> neighbors)
     {
-        int yellowNeighbors = neighbors.Count(n =>  n != node && n.cellState == CellState.yellow);
+        int yellowNeighbors = neighbors.Count(n => n.cellState == CellState.yellow);
     
         if (node.cellState == CellState.yellow)
         {
@@ -110,9 +110,9 @@ public class GreenCellBehavior : CellBehaviorInterface
 
     public CellState GetNextState(Node node, List<Node> neighbors)
     {
-        int greenNeighbors = neighbors.Count(n =>  n != node && n.cellState == CellState.green);
+        int greenNeighbors = neighbors.Count(n => n.cellState == CellState.green);
     
-        if (node.cellState == CellState.yellow)
+        if (node.cellState == CellState.green)
         {
             return (greenNeighbors >= 2 && greenNeighbors <= 3) ? CellState.green : CellState.dead;
         }

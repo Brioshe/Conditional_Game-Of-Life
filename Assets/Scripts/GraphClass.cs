@@ -7,7 +7,6 @@ public class GraphClass : MonoBehaviour
     public Node[,] nodes; //Array of nodes
     public NodeView[,] nodeViews;
 
-    int[,] m_mapData;
     public int m_width;
     public int m_height;
 
@@ -25,7 +24,6 @@ public class GraphClass : MonoBehaviour
 
     public void Init(int[,] mapData)
     {
-        m_mapData = mapData;
         m_width = mapData.GetLength(0);
         m_height = mapData.GetLength(1);
         nodes = new Node[m_width, m_height];
@@ -53,7 +51,7 @@ public class GraphClass : MonoBehaviour
 
     public bool IsWithinBounds(int x, int y)
     {
-        return (x >= 0 && x < m_width && y >= 0 && y < m_height);
+        return x >= 0 && x < m_width && y >= 0 && y < m_height;
     }
 
     List<Node> GetNeighbors(int x, int y, Node[,] NodeArray, Vector2[] directions)

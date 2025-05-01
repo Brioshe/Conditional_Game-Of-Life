@@ -315,27 +315,34 @@ public class GameController : MonoBehaviour
         }
     }
 
+    // Button Colors
+
+    public Color redButtonColor = new Color32(229, 79, 79, 255);
+    public Color blueButtonColor = new Color32(84, 165, 236, 255);
+    public Color yellowButtonColor = new Color32(236, 205, 82, 255);
+    public Color greenButtonColor = new Color32(69, 181, 84, 255);
+
     public void redButton()
     {
         switchCellState = CellState.red;
-        SelectedBG.color = Color.red;
+        SelectedBG.color = redButtonColor;
     }
 
     public void yellowButton()
     {
         switchCellState = CellState.yellow;
-        SelectedBG.color = Color.yellow;
+        SelectedBG.color = yellowButtonColor;
     }
 
     public void blueButton()
     {
         switchCellState = CellState.blue;
-        SelectedBG.color = Color.blue;
+        SelectedBG.color = blueButtonColor;
     }
 
     public void greenButton()
     {
         switchCellState = CellState.green;
-        SelectedBG.color = new Color32(45, 115, 54, 255);
+        SelectedBG.color = greenButtonColor;
     }
 }

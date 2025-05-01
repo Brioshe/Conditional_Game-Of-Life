@@ -4,11 +4,11 @@ using UnityEngine;
 public class GraphView : MonoBehaviour
 {
     public GameObject nodeviewPrefab;
-    public Color redColor = Color.red;
-    public Color blueColor = Color.blue;
-    public Color yellowColor = Color.yellow;
-    public Color greenColor = new Color32(45, 115, 54, 255);
-    public Color deadColor = Color.white;
+    public Color redColor = new Color32(229, 79, 79, 255);
+    public Color blueColor = new Color32(84, 165, 236, 255);
+    public Color yellowColor = new Color32(236, 205, 82, 255);
+    public Color greenColor = new Color32(69, 181, 84, 255);
+    public Color deadColor = new Color32(48, 54, 72, 255);
     public NodeView[,] nodeViews;
     public void Init(GraphClass graph)
     {

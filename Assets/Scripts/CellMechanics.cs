@@ -72,7 +72,7 @@ public class CellMechanics : MonoBehaviour
             aliveNeighborCount = CountAliveNeighbors(n);
             var neighbors = n.neighbors;
             CellState currentState = n.cellState; 
-            CellState avgNeighbor = AvgCellState(n);
+            CellState avgNeighbor = GetMajorityNode(n);
 
             if (behaviorMap.TryGetValue(avgNeighbor, out var behavior))
             {
@@ -118,28 +118,37 @@ public class CellMechanics : MonoBehaviour
         return aliveCount;
     }
 
-    public CellState AvgCellState(Node node)
+    public CellState GetMajorityNode(Node node)
     {
-        float sum = 0;
-        int avgDivValue = 0;
+        Dictionary<CellState, int> frequency = new Dictionary<CellState, int>
+        {
+            { CellState.red, 0},
+            { CellState.blue, 0},
+            { CellState.yellow, 0},
+            { CellState.green, 0}
+        };
 
         foreach (Node n in node.neighbors)
         {
-            if(n.cellState != CellState.dead)
+            if (n.cellState != CellState.dead)
             {
-                sum += (int)n.cellState;
-                avgDivValue++;
+                frequency[n.cellState]++;
             }
         }
 
-        sum /= avgDivValue;
+        CellState majority = CellState.dead;
+        int mode = 0;
 
-        if (avgDivValue == 0)
+        foreach (var colorKey in frequency)
         {
-            return node.cellState;
+            if (colorKey.Value > mode)
+            {
+                mode = colorKey.Value;
+                majority = colorKey.Key;
+            }
         }
-        
-        return (CellState)Math.Ceiling(sum);
+
+        return majority;
     }
 
     private void RandomNodeChange(Node node)
