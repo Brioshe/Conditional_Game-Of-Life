@@ -83,7 +83,7 @@ public class CellMechanics : MonoBehaviour
                     RandomNodeChange(n);
                 }
 
-                if (currentState == CellState.red && neighbors.Count(n => n.cellState == CellState.green) > 1)
+                if (currentState == CellState.red && neighbors.Count(o => o.cellState == CellState.green) > 0)
                 {
                     RandomNodeChange(n);
                 }
