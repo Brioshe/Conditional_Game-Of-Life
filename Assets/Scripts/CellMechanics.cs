@@ -10,6 +10,8 @@ public class CellMechanics : MonoBehaviour
     GraphClass Graph;
     GraphView GraphView;
     public CellState[,] nextStates;
+    public bool fightFlag = false;
+    public bool idleFlag = true;
 
     private Dictionary<CellState, CellBehaviorInterface> behaviorMap;
 
@@ -74,18 +76,44 @@ public class CellMechanics : MonoBehaviour
             CellState currentState = n.cellState; 
             CellState avgNeighbor = GetMajorityNode(n);
 
-            if (behaviorMap.TryGetValue(avgNeighbor, out var behavior))
+            if (idleFlag == true)
             {
-                currentState = behavior.GetNextState(n, neighbors);
-
-                if (currentState == CellState.blue)
+                if (behaviorMap.TryGetValue(avgNeighbor, out var behavior))
                 {
-                    RandomNodeChange(n);
+                    // Birth turn
+                    currentState = behavior.GetNextState(n, neighbors);
+
+                    if (currentState == CellState.blue)
+                    {
+                        RandomNodeChange(n);
+                    }
+
+                    if (currentState == CellState.red && neighbors.Count(o => o.cellState == CellState.green) > 0)
+                    {
+                        RandomNodeChange(n);
+                    }
                 }
+            }
 
-                if (currentState == CellState.red && neighbors.Count(o => o.cellState == CellState.green) > 0)
+            if (fightFlag == true)
+            {
+                if (behaviorMap.TryGetValue(currentState, out var behavior))
                 {
-                    RandomNodeChange(n);
+                    // Fighting turn
+                    if (currentState != avgNeighbor && currentState != CellState.dead)
+                    {
+                        currentState = behavior.ReplaceState(n, avgNeighbor);
+                    }
+                    // Yellow x Red Exception:
+                    if (currentState == CellState.red && neighbors.Count(n => n.cellState == CellState.yellow) > 0)
+                    {
+                        currentState = behavior.ReplaceState(n, CellState.yellow);
+                    }
+                    // Green x Blue Exception
+                    if (currentState == CellState.blue && neighbors.Count(n => n.cellState == CellState.green) > 1)
+                    {
+                        currentState = behavior.ReplaceState(n, CellState.green);
+                    }
                 }
             }
 
@@ -103,6 +131,8 @@ public class CellMechanics : MonoBehaviour
         }
 
         UpdateAliveNodes();
+        fightFlag = !fightFlag;
+        idleFlag = !idleFlag;
     }
 
     public int CountAliveNeighbors(Node node)

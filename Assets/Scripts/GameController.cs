@@ -56,13 +56,14 @@ public class GameController : MonoBehaviour
     public TMP_Dropdown dropdown;
     public enum MapPresets {
         empty,
-        fourcorners
+        fourcorners,
+        pinstripes
     }
 
     public MapPresets mapPreset;
-
     public TextAsset test;
     public TextAsset fourcorners;
+    public TextAsset pinstripes;
 
     // Flags
     private bool mapSetFlag = false;
@@ -164,6 +165,10 @@ public class GameController : MonoBehaviour
             else if (mapPreset == MapPresets.fourcorners)
             {
                 SetState(fourcorners);
+            }
+            else if (mapPreset == MapPresets.pinstripes)
+            {
+                SetState(pinstripes);
             }
             mapSetFlag = true;
         }

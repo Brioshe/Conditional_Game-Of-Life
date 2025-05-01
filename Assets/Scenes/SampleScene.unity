@@ -180,8 +180,8 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.7176471, g: 0.7176471, b: 0.7176471, a: 1}
-    m_PressedColor: {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 1}
+    m_HighlightedColor: {r: 0.6377357, g: 0.6377357, b: 0.6377357, a: 1}
+    m_PressedColor: {r: 0.3132075, g: 0.3132075, b: 0.3132075, a: 1}
     m_SelectedColor: {r: 0.3490566, g: 0.3490566, b: 0.3490566, a: 1}
     m_DisabledColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
     m_ColorMultiplier: 1
@@ -3624,7 +3624,7 @@ MonoBehaviour:
   greenNormal: {r: 0.5568628, g: 0.94509804, b: 0.54901963, a: 1}
   greenHighlighted: {r: 0.43529412, g: 0.7254902, b: 0.42745098, a: 1}
   greenPressed: {r: 0.34117648, g: 0.5372549, b: 0.3372549, a: 1}
-  blueNormal: {r: 0.6666667, g: 0.82115936, b: 0.8901961, a: 1}
+  blueNormal: {r: 0.6383837, g: 0.83933073, b: 0.93207544, a: 1}
   blueHighlighted: {r: 0.5137255, g: 0.7176471, b: 0.83137256, a: 1}
   bluePressed: {r: 0.34901962, g: 0.56078434, b: 0.6784314, a: 1}
   defaultNormal: {r: 1, g: 1, b: 1, a: 1}
@@ -3634,6 +3634,7 @@ MonoBehaviour:
   mapPreset: 0
   test: {fileID: 4900000, guid: f53879af3af6d6643a13561b54f73595, type: 3}
   fourcorners: {fileID: 4900000, guid: c1385e39344659144bb09dc7bd9898e1, type: 3}
+  pinstripes: {fileID: 4900000, guid: cd628918e1053e8498d82515f292bb8f, type: 3}
   switchCellState: 1
   redButtonColor: {r: 0.8980392, g: 0.30980393, b: 0.30980393, a: 1}
   blueButtonColor: {r: 0.32941177, g: 0.64705884, b: 0.9254902, a: 1}
@@ -4668,6 +4669,9 @@ MonoBehaviour:
     - m_Text: Four Corners
       m_Image: {fileID: 0}
       m_Color: {r: 1, g: 1, b: 1, a: 1}
+    - m_Text: Pinstripes
+      m_Image: {fileID: 0}
+      m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -5313,6 +5317,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87963f43034f57e4eaadd12497bdfe6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fightFlag: 0
+  idleFlag: 1
 --- !u!4 &2033231424
 Transform:
   m_ObjectHideFlags: 0

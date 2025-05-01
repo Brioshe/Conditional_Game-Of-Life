@@ -7,8 +7,7 @@ using UnityEngine;
 public interface CellBehaviorInterface
 {   
     CellState GetNextState(Node node, List<Node> neighbors);
-    CellState? GetReplacement(Node node, List<Node> neighbors);
-    float GetWinChanceAgainst(CellState opponent);
+    CellState ReplaceState(Node node, CellState majorityNeighbor);
 }
 
 public class RedCellBehavior : CellBehaviorInterface
@@ -32,13 +31,24 @@ public class RedCellBehavior : CellBehaviorInterface
             return node.cellState;
         }
     }
-    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    public CellState ReplaceState(Node node, CellState majorityNeighbor)
     {
-        return CellState.dead;
-    }
-    public float GetWinChanceAgainst(CellState opponent)
-    {
-        return 0;
+        int randomInt = (int)UnityEngine.Random.Range(1, 100);
+
+        if (majorityNeighbor == CellState.blue && randomInt >= 30)
+        {
+            return CellState.blue;
+        }
+        else if (majorityNeighbor == CellState.yellow && randomInt >= 20)
+        {
+            return CellState.yellow;
+        }
+        else if (majorityNeighbor == CellState.green)
+        {
+            return node.cellState;
+        }
+
+        return node.cellState;
     }
 }
 
@@ -63,13 +73,23 @@ public class BlueCellBehavior : CellBehaviorInterface
             return node.cellState;
         }
     }
-    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    public CellState ReplaceState(Node node, CellState majorityNeighbor)
     {
-        return CellState.dead;
-    }
-    public float GetWinChanceAgainst(CellState opponent)
-    {
-        return 0;
+        int randomInt = (int)UnityEngine.Random.Range(1, 100);
+        if (majorityNeighbor == CellState.red && randomInt >= 70)
+        {
+            return CellState.red;
+        }
+        else if (majorityNeighbor == CellState.yellow && randomInt >= 55)
+        {
+            return CellState.yellow;
+        }
+        else if (majorityNeighbor == CellState.green && randomInt >= 10)
+        {
+            return CellState.green;
+        }
+
+        return node.cellState;
     }
 }
 
@@ -94,13 +114,23 @@ public class YellowCellBehavior : CellBehaviorInterface
             return CellState.dead;
         }
     }
-    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    public CellState ReplaceState(Node node, CellState majorityNeighbor)
     {
-        return CellState.dead;
-    }
-    public float GetWinChanceAgainst(CellState opponent)
-    {
-        return 0;
+        int randomInt = (int)UnityEngine.Random.Range(1, 100);
+        if (majorityNeighbor == CellState.red && randomInt >= 80)
+        {
+            return CellState.red;
+        }
+        else if (majorityNeighbor == CellState.blue && randomInt >= 45)
+        {
+            return CellState.blue;
+        }
+        else if (majorityNeighbor == CellState.green && randomInt >= 65)
+        {
+            return CellState.green;
+        }
+
+        return node.cellState;
     }
 }
 
@@ -125,12 +155,22 @@ public class GreenCellBehavior : CellBehaviorInterface
             return CellState.dead;
         }
     }
-    public CellState? GetReplacement(Node node, List<Node> neighbors)
+    public CellState ReplaceState(Node node, CellState majorityNeighbor)
     {
-        return CellState.dead;
-    }
-    public float GetWinChanceAgainst(CellState opponent)
-    {
-        return 0;
+        int randomInt = (int)UnityEngine.Random.Range(1, 100);
+        if (majorityNeighbor == CellState.red)
+        {
+            return node.cellState;
+        }
+        else if (majorityNeighbor == CellState.blue && randomInt >= 90)
+        {
+            return CellState.blue;
+        }
+        else if (majorityNeighbor == CellState.yellow && randomInt >= 35)
+        {
+            return CellState.yellow;
+        }
+
+        return node.cellState;
     }
 }
